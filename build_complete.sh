@@ -63,7 +63,7 @@ if [ "$(check_deps "$needed_deps")" ]; then
   #install deps automatically on debian and ubuntu
   if [ -f "/etc/debian_version" ]; then
     print_title "attempting to install build deps"
-    apt-get install wget python3 unzip zip debootstrap cpio binwalk pcregrep cgpt kmod pv lz4 -y
+    nala install wget python3 unzip zip debootstrap cpio binwalk pcregrep cgpt kmod pv lz4 -y
   fi
   assert_deps "$needed_deps"
 fi
@@ -73,7 +73,7 @@ if [ "$arch" != "$host_arch" ]; then
   if [ -f "/etc/debian_version" ]; then
     if ! dpkg --get-selections | grep -v deinstall | grep "qemu-user-static\|box64\|fex-emu" > /dev/null; then
       print_info "automatically installing qemu-user-static because we are building for a different architecture"
-      apt-get install qemu-user-static binfmt-support -y
+      nala install qemu-user-static binfmt-support -y
     fi
   else 
     print_error "Warning: You are building an image for a different CPU architecture. It may fail if you do not have qemu-user-static installed."
@@ -195,7 +195,7 @@ if [ ! "$rootfs_dir" ]; then
       deb_file="$(curl "https://deb.debian.org/debian/pool/main/d/debootstrap/" | pcregrep -o1 'href="(debootstrap_.+?\.deb)"' | tail -n1)"
       deb_url="${mirror_url}${deb_file}"
       wget -q --show-progress "$deb_url" -O "/tmp/$deb_file"
-      apt-get install -y "/tmp/$deb_file"
+      nala install -y "/tmp/$deb_file"
     fi
   fi
 
